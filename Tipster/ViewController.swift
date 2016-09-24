@@ -8,8 +8,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var userControlsView: UIView!
+    
     @IBOutlet weak var tipSlider: UISlider!
     
     @IBOutlet weak var tipPctTopLabel: UILabel!
@@ -22,7 +24,11 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var customerBillField: UITextField!
     
-    var isBillFinalized: Bool = true
+    var billIsFinalized: Bool = true
+    var appIsAlreadyRunning: Bool = false
+    
+    var currencyFormatter = NSNumberFormatter()
+    var billFormatter = NSNumberFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,47 +45,29 @@ class ViewController: UIViewController {
     }
 
     @IBAction func onTipPctChanged(sender: UISlider) {
-        let userTipPct = Int(sender.value)
-        tipPctTopLabel.text = "\(userTipPct)%"
-        tipPctBottomLabel.text = "\(userTipPct)%"
-        
-        let userBill = Double(customerBillField.text!) ?? 0
-        
-        calcTip(userBill, tipPct: userTipPct)
-        
-//        tipPctTopLabel.text = tipPctBottomLabel.text = String(format: "%d", userTipPct)
+        updateUi()
     }
     
     //User started typing in text field
     @IBAction func onCustomerBillBeginEditing(sender: UITextField) {
+        billIsFinalized=false
         sender.text = ""
-        calcTip(0, tipPct: 0)
+        updateUi()
     }
     
     //User is typing in Bill text field
     @IBAction func onCustomerBillChanged(sender: UITextField) {
-        let userTipPct = Int(tipSlider.value) ?? 0
-        let userBill = Double(customerBillField.text!) ?? 0
-        
-//        customerBillField.text = String(format: "$%.2f", userBill)
-        
-        calcTip(userBill, tipPct: userTipPct)
+        billIsFinalized=false
+        updateUi()
     }
     
     //User has finished typing in Bill text field
     @IBAction func onCustomerBillFinalized(sender: UITextField) {
-        isBillFinalized = true
-        
-        let userTipPct = Int(tipSlider.value) ?? 0
-        let userBill = Double(customerBillField.text!) ?? 0
-        
-        customerBillField.text = String(format: "$%.2f", userBill)
-        
-        calcTip(userBill, tipPct: userTipPct)
+        billIsFinalized=true
+        updateUi()
     }
     
     func calcTip(bill: Double, tipPct: Int){
-        
         let tipNotional = bill * Double(tipPct)/100
         let totalBill = bill + tipNotional
         
@@ -87,15 +75,69 @@ class ViewController: UIViewController {
         totalBillLabel.text = String(format: "$%.2f", totalBill)
     }
     
+    func updateUi(){
+        let userTipPct = Int(tipSlider.value)
+        let stringBill = customerBillField.text!
+        let userBill = formatBillToDouble(stringBill)
+        
+        let tipNotional = userBill * Double(userTipPct)/100
+        let totalBill = userBill + tipNotional
+        
+        tipNotionalLabel.text = currencyFormatter.stringFromNumber(tipNotional)
+        totalBillLabel.text = currencyFormatter.stringFromNumber(totalBill)
+        tipPctTopLabel.text = "\(userTipPct)%"
+        tipPctBottomLabel.text = "\(userTipPct)%"
+        if billIsFinalized{
+            var formattedBill = ""
+            billFormatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+            formattedBill = billFormatter.stringFromNumber(userBill)!
+            customerBillField.text = formattedBill
+        }
+    }
+    
+    func formatBillToDouble(bill: String) -> Double {
+        if bill == ""{return 0}
+        print("formatBillToDouble: \(billFormatter.numberFromString(bill))")
+
+        if bill[bill.startIndex] == "$"{
+            return Double(currencyFormatter.numberFromString(bill)!)
+        }else{
+            return Double(bill) ?? 0
+        }
+    }
+    
     //Initialize view
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        tipPctTopLabel.text = "\(tipSlider.value)%"
-        tipPctBottomLabel.text = "\(tipSlider.value)%"
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let defaultTip = defaults.integerForKey("default_tip")
-//        tipSlider.setValue(Float(defaultTip), animated: true)
-        print("view will appear")
+        
+        userControlsView.layer.cornerRadius = 10
+        userControlsView.layer.masksToBounds = true
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaultTip = defaults.integerForKey("default_tip")
+        tipSlider.setValue(Float(defaultTip), animated: true)
+        billIsFinalized=false
+        updateUi()
+    }
+    
+    //Initialize view part 2
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        billFormatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        currencyFormatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        if appIsAlreadyRunning{
+            
+        }else{
+            //App has just started so make text field first responder
+            //Tell the program that the app is already running
+            customerBillField.delegate = self
+            customerBillField.becomeFirstResponder()
+            appIsAlreadyRunning = true
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
 }
