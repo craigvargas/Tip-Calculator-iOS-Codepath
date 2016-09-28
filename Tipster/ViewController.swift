@@ -30,6 +30,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var currencyFormatter = NSNumberFormatter()
     var billFormatter = NSNumberFormatter()
     
+    let timeout = 10*60
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -106,6 +108,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func clearBill(){
+        customerBillField.text = ""
+    }
+    
+    func setupFirstResponder(){
+        customerBillField.delegate = self
+        customerBillField.becomeFirstResponder()
+        appIsAlreadyRunning = true
+    }
+    
     //Initialize view
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -116,6 +128,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let defaults = NSUserDefaults.standardUserDefaults()
         let defaultTip = defaults.integerForKey("default_tip")
         tipSlider.setValue(Float(defaultTip), animated: true)
+        
         billIsFinalized=false
         updateUi()
     }
@@ -123,21 +136,43 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //Initialize view part 2
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
         billFormatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
         currencyFormatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        if appIsAlreadyRunning{
-            
-        }else{
-            //App has just started so make text field first responder
-            //Tell the program that the app is already running
-            customerBillField.delegate = self
-            customerBillField.becomeFirstResponder()
-            appIsAlreadyRunning = true
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let lastUpdate = defaults.objectForKey("time_stamp")
+        var interval = lastUpdate?.timeIntervalSinceNow
+        if interval != nil{
+            interval = -1*interval!
+            print("Interval: \(interval)")
+            if Int(interval!) > timeout{
+                //make text field first responder
+                setupFirstResponder()
+            }else{
+                let userBill = defaults.doubleForKey("bill")
+                if userBill == 0{
+                    setupFirstResponder()
+                }else{
+                    customerBillField.text = String(userBill)
+                    billIsFinalized=true
+                    updateUi()
+                }
+            }
         }
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let timestamp = NSDate.init()
+        defaults.setObject(timestamp, forKey: "time_stamp")
+
+        let stringBill = customerBillField.text!
+        let userBill = formatBillToDouble(stringBill)
+        defaults.setDouble(userBill, forKey: "bill")
+        
+        print("Disapear Timestamp \(timestamp)")
     }
     
 }
