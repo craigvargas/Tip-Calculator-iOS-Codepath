@@ -14,24 +14,25 @@ The following **required** functionality is complete:
 * [X] Settings page to change the default tip percentage.
 
 The following **optional** features are implemented:
-* [ ] UI animations
-* [ ] Remembering the bill amount across app restarts (if <10mins)
+* [X] UI animations
+* [X] Remembering the bill amount across app restarts (if <10mins)
 * [X] Using locale-specific currency and currency thousands separators.
 * [X] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
 
 The following **additional** features are implemented:
 
-- [X] Decorated UI with different layout and color scheme
-- [X] Used a slider for the tip adjustment rather than a segmented control; Allows for more tip optoins.
-- [X] Used a UIPicker for settings page to give the user a different way to select a tip
-- [X] Used Autolayout to accomodate different sized screens
-- [X] Only implemented first responder code for the Text field to work when the app initially starts. I thought that after the user changes the default settings they have likely already played around with the tip slider; which means they have likely already entered their bill into the app, so it is not straight forward that they want to change the bill when they return from the settings screen. 
+* [X] Decorated UI with different layout and color scheme
+* [X] Used a slider for the tip adjustment rather than a segmented control; Allows for more tip optoins.
+* [X] Used a UIPicker for settings page to give the user a different way to select a tip
+* [X] Used Autolayout to accomodate different sized screens
+* [X] Only implemented first responder code for the Text field to work when the app initially starts. I thought that after the user changes the default settings they have likely already played around with the tip slider; which means they have likely already entered their bill into the app, so it is not straight forward that they want to change the bill when they return from the settings screen. 
+* [X] Added a switch that toggles between two preset UI styles (Tints & Colors)
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/craigvargas/Tip-Calculator-iOS-Codepath/blob/master/Tipster_Walkthrough_Wide.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/craigvargas/Tip-Calculator-iOS-Codepath/blob/master/Tipster_Walkthrough_2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
