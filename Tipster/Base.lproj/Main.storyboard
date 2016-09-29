@@ -14,7 +14,7 @@
                         <viewControllerLayoutGuide type="top" id="ZtU-9M-IzY"/>
                         <viewControllerLayoutGuide type="bottom" id="BBq-Gf-XBd"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="bGT-2B-wJD">
+                    <view key="view" contentMode="scaleToFill" id="bGT-2B-wJD" userLabel="ViewController">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -34,8 +34,8 @@
                                     </textField>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="20" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="CJd-ZU-rrP">
                                         <rect key="frame" x="6" y="132" width="548" height="31"/>
-                                        <color key="minimumTrackTintColor" red="0.96470588235294119" green="0.062745098039215685" blue="0.40392156862745099" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="maximumTrackTintColor" red="0.94901960780000005" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="minimumTrackTintColor" red="0.94901960780000005" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="maximumTrackTintColor" red="0.0" green="0.0" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="onTipPctChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="gvv-Ep-QGe"/>
                                         </connections>
@@ -96,7 +96,7 @@
                                     <outletCollection property="gestureRecognizers" destination="3CR-ZN-D7P" appends="YES" id="SAA-QC-c0Y"/>
                                 </connections>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bDT-Mo-uF8">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bDT-Mo-uF8" userLabel="OutputView">
                                 <rect key="frame" x="20" y="254" width="560" height="302"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tip %:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ca4-CB-RaS">
@@ -153,7 +153,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.25882352941176467" green="0.29411764705882354" blue="0.32941176470588235" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.25882352939999997" green="0.29411764709999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstItem="5ev-qt-RY8" firstAttribute="top" secondItem="bDT-Mo-uF8" secondAttribute="top" constant="20" id="2ew-Ne-fkF"/>
@@ -219,12 +219,15 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="customerBillField" destination="H1T-Rh-ApB" id="hZg-6h-ak1"/>
+                        <outlet property="outputView" destination="bDT-Mo-uF8" id="PNz-ck-Lpp"/>
                         <outlet property="tipNotionalLabel" destination="nfw-ag-Oya" id="NHd-Vu-ebJ"/>
                         <outlet property="tipPctBottomLabel" destination="5ev-qt-RY8" id="ySb-Ka-SuU"/>
                         <outlet property="tipPctTopLabel" destination="3q9-xZ-Q6t" id="0CU-wQ-G1V"/>
                         <outlet property="tipSlider" destination="CJd-ZU-rrP" id="UMp-Wa-MGg"/>
                         <outlet property="totalBillLabel" destination="nBw-jO-8N1" id="h8r-6O-p02"/>
+                        <outlet property="totalBillNameLabel" destination="K1L-V8-2bg" id="9GB-hf-f1H"/>
                         <outlet property="userControlsView" destination="TCL-uM-NoU" id="wIL-Fp-lI3"/>
+                        <outlet property="viewControllerView" destination="bGT-2B-wJD" id="65x-wr-aPB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -279,12 +282,36 @@
                                     <outlet property="delegate" destination="vrL-P7-0qH" id="Nr7-s8-C6x"/>
                                 </connections>
                             </pickerView>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VeK-34-tAi">
+                                <rect key="frame" x="531" y="350" width="51" height="31"/>
+                                <color key="onTintColor" red="0.0" green="0.94117647059999998" blue="0.70980392160000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="onStyleSwitchValueChanged:" destination="iwy-Zq-nHk" eventType="valueChanged" id="fdc-Y3-VHw"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Dracula Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eyO-HC-VgU">
+                                <rect key="frame" x="20" y="355" width="110" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dracula-head2.png" translatesAutoresizingMaskIntoConstraints="NO" id="0GK-4G-V2e">
+                                <rect key="frame" x="275" y="397" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Tto-WD-Y5y"/>
+                                    <constraint firstAttribute="width" constant="50" id="Y0X-vi-DRA"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.25882352939999997" green="0.29411764709999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="gY6-Fq-cYf" firstAttribute="centerX" secondItem="vrL-P7-0qH" secondAttribute="centerX" id="7RJ-qd-XLL"/>
                             <constraint firstItem="rlb-mh-X4d" firstAttribute="top" secondItem="mLp-eD-bLN" secondAttribute="bottom" constant="20" id="9VM-6k-vFe"/>
                             <constraint firstItem="rlb-mh-X4d" firstAttribute="leading" secondItem="vrL-P7-0qH" secondAttribute="leadingMargin" id="Ee1-rb-NCw"/>
+                            <constraint firstItem="0GK-4G-V2e" firstAttribute="top" secondItem="qAo-fu-kCL" secondAttribute="bottom" constant="78" id="Orn-3U-JA4"/>
+                            <constraint firstItem="0GK-4G-V2e" firstAttribute="centerX" secondItem="vrL-P7-0qH" secondAttribute="centerX" id="UYg-z4-TVt"/>
+                            <constraint firstItem="VeK-34-tAi" firstAttribute="top" secondItem="rlb-mh-X4d" secondAttribute="bottom" constant="96" id="cFJ-Fv-gZ1"/>
+                            <constraint firstItem="VeK-34-tAi" firstAttribute="trailing" secondItem="vrL-P7-0qH" secondAttribute="trailingMargin" id="cVe-Qd-qe6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="rlb-mh-X4d" secondAttribute="trailing" id="iGT-QG-Ghk"/>
                             <constraint firstItem="qAo-fu-kCL" firstAttribute="top" secondItem="gY6-Fq-cYf" secondAttribute="bottom" constant="7.5" id="pZz-XD-yfa"/>
                             <constraint firstItem="gY6-Fq-cYf" firstAttribute="top" secondItem="rlb-mh-X4d" secondAttribute="bottom" constant="8" id="qy3-j5-MRQ"/>
@@ -293,6 +320,9 @@
                     </view>
                     <connections>
                         <outlet property="defaultTipLabel" destination="qAo-fu-kCL" id="s9a-Lh-t3k"/>
+                        <outlet property="draculaImage" destination="0GK-4G-V2e" id="Ptr-ED-6jb"/>
+                        <outlet property="settingsView" destination="vrL-P7-0qH" id="ed2-Lj-Pku"/>
+                        <outlet property="styleSwitch" destination="VeK-34-tAi" id="BZl-hv-yDE"/>
                         <outlet property="tipDefaultPicker" destination="rlb-mh-X4d" id="aCM-mw-GoA"/>
                     </connections>
                 </viewController>
@@ -319,4 +349,7 @@
             <point key="canvasLocation" x="308" y="1023.9999999999999"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="dracula-head2.png" width="512" height="512"/>
+    </resources>
 </document>

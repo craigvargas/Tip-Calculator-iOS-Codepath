@@ -17,6 +17,12 @@ class SettingsViewController:
     
     @IBOutlet weak var defaultTipLabel: UILabel!
     
+    @IBOutlet weak var styleSwitch: UISwitch!
+    
+    @IBOutlet weak var settingsView: UIView!
+    
+    @IBOutlet weak var draculaImage: UIImageView!
+    
     var defaultTip: Int = 0
     var defaultTipHundreds: Int = 0
     var defaultTipTens: Int = 0
@@ -28,6 +34,40 @@ class SettingsViewController:
         ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         ]
     //[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    
+    static let defaultTipKey = "default_tip"
+    static let draculaModeSettingKey = "dracula_mode"
+    
+//    struct tipsterColors {
+    //Outer Space: #424B54
+    static let draculaPrimary =
+    UIColor(red: 0x42 / 0xFF, green: 0x4B / 0xFF, blue: 0x54 / 0xFF, alpha: 0xFF / 0xFF)
+    
+    //Medium Purple: #8E83F5
+    static let draculaSecondary =
+    UIColor(red: 0x8E / 0xFF, green: 0x83 / 0xFF, blue: 0xF5 / 0xFF, alpha: 0xFF / 0xFF)
+    
+    //Medium Spring Green: #00F0B5
+    static let draculaAccent =
+    UIColor(red: 0x00 / 0xFF, green: 0xF0 / 0xFF, blue: 0xB5 / 0xFF, alpha: 0xFF / 0xFF)
+    
+    
+    //Dodger Blue: #2196F3
+    static let tipsterPrimary =
+    UIColor(red: 0x21 / 0xFF, green: 0x96 / 0xFF, blue: 0xF3 / 0xFF, alpha: 0xFF / 0xFF)
+    
+    //Sunset Orange: #FF5656
+    static let tipsterSecondary =
+    UIColor(red: 0xFF / 0xFF, green: 0x56 / 0xFF, blue: 0x56 / 0xFF, alpha: 0xFF / 0xFF)
+    
+    //Radical Red: #FF3366
+    static let tipsterAccent2 =
+    UIColor(red: 0xFF / 0xFF, green: 0x33 / 0xFF, blue: 0x66 / 0xFF, alpha: 0xFF / 0xFF)
+    
+    //Lemon Glacier: #F2FF00
+    static let tipsterAccent =
+    UIColor(red: 0xF2 / 0xFF, green: 0xFF / 0xFF, blue: 0x00 / 0xFF, alpha: 0xFF / 0xFF)
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,8 +145,48 @@ class SettingsViewController:
     
     func saveDefault(){
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(defaultTip, forKey: "default_tip")
+        defaults.setInteger(
+            defaultTip,
+            forKey: SettingsViewController.defaultTipKey)
+        defaults.setBool(
+            styleSwitch.on,
+            forKey: SettingsViewController.draculaModeSettingKey)
         defaults.synchronize()
+    }
+    
+    
+    @IBAction func onStyleSwitchValueChanged(sender: UISwitch) {
+        let draculaModeIsOn = styleSwitch.on
+        updateUiStyle(draculaModeIsOn)
+    }
+    
+    func updateUiStyle(draculaModeIsOn: Bool){
+        print("styleSwitch state: \(draculaModeIsOn)")
+        if draculaModeIsOn{
+            settingsView.backgroundColor =
+                SettingsViewController.draculaPrimary
+            tipDefaultPicker.backgroundColor =
+                SettingsViewController.draculaSecondary
+            defaultTipLabel.textColor =
+                SettingsViewController.draculaAccent
+            UIView.animateWithDuration(1, animations: {
+                self.draculaImage.alpha = 1
+            })
+
+        }else{
+            settingsView.backgroundColor =
+                SettingsViewController.tipsterPrimary
+            tipDefaultPicker.backgroundColor =
+                SettingsViewController.tipsterSecondary
+            defaultTipLabel.textColor =
+                SettingsViewController.tipsterAccent
+            UIView.animateWithDuration(1, animations: {
+                self.draculaImage.alpha = 0
+            })
+
+        }
+        styleSwitch.setOn(draculaModeIsOn, animated: true)
+        
     }
     
     //Initialize view
@@ -117,7 +197,8 @@ class SettingsViewController:
         defaultTip = 0
         
         //Get default tip from settings
-        defaultTip = defaults.integerForKey("default_tip")
+        defaultTip = defaults.integerForKey(
+            SettingsViewController.defaultTipKey)
         
         //Calculate the hunreths, tens, and ones digit values
         let hundreds = Int(defaultTip/100)
@@ -142,6 +223,10 @@ class SettingsViewController:
         
         //Set the default tip text
         defaultTipLabel.text = "\(defaultTip)%"
+        
+        let draculaModeIsOn = defaults.boolForKey(
+            SettingsViewController.draculaModeSettingKey)
+        updateUiStyle(draculaModeIsOn)
     }
     
     override func viewDidAppear(animated: Bool) {

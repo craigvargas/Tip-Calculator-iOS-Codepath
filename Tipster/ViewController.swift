@@ -12,6 +12,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var userControlsView: UIView!
     
+    @IBOutlet weak var outputView: UIView!
+    
+    @IBOutlet weak var viewControllerView: UIView!
+    
+    @IBOutlet weak var totalBillNameLabel: UILabel!
+    
+    
+    
     @IBOutlet weak var tipSlider: UISlider!
     
     @IBOutlet weak var tipPctTopLabel: UILabel!
@@ -23,6 +31,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var totalBillLabel: UILabel!
     
     @IBOutlet weak var customerBillField: UITextField!
+    
+    
     
     var billIsFinalized: Bool = true
     var appIsAlreadyRunning: Bool = false
@@ -118,6 +128,38 @@ class ViewController: UIViewController, UITextFieldDelegate {
         appIsAlreadyRunning = true
     }
     
+    func updateUiStyle(draculaModeIsOn: Bool){
+        print("styleSwitch state: \(draculaModeIsOn)")
+        if draculaModeIsOn{
+            viewControllerView.backgroundColor =
+                SettingsViewController.draculaPrimary
+            outputView.backgroundColor =
+                SettingsViewController.draculaPrimary
+            userControlsView.backgroundColor =
+                SettingsViewController.draculaSecondary
+            tipPctTopLabel.textColor =
+                SettingsViewController.draculaAccent
+            totalBillNameLabel.textColor =
+                SettingsViewController.draculaAccent
+            totalBillLabel.textColor =
+                SettingsViewController.draculaAccent
+        }else{
+            viewControllerView.backgroundColor =
+                SettingsViewController.tipsterPrimary
+            outputView.backgroundColor =
+                SettingsViewController.tipsterPrimary
+            userControlsView.backgroundColor =
+                SettingsViewController.tipsterSecondary
+            tipPctTopLabel.textColor =
+                SettingsViewController.tipsterAccent
+            totalBillNameLabel.textColor =
+                SettingsViewController.tipsterAccent
+            totalBillLabel.textColor =
+                SettingsViewController.tipsterAccent
+        }
+    }
+
+    
     //Initialize view
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -126,8 +168,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
         userControlsView.layer.masksToBounds = true
         
         let defaults = NSUserDefaults.standardUserDefaults()
+        
         let defaultTip = defaults.integerForKey("default_tip")
         tipSlider.setValue(Float(defaultTip), animated: true)
+        
+        let draculaModeIsOn = defaults.boolForKey(
+            SettingsViewController.draculaModeSettingKey)
+        
+        updateUiStyle(draculaModeIsOn)
         
         billIsFinalized=false
         updateUi()
@@ -151,7 +199,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 setupFirstResponder()
             }else{
                 let userBill = defaults.doubleForKey("bill")
-                if userBill == 0{
+                print("userBill: \(userBill)")
+                if userBill == 0 || customerBillField.text! == ""{
                     setupFirstResponder()
                 }else{
                     customerBillField.text = String(userBill)
@@ -159,6 +208,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
                     updateUi()
                 }
             }
+        }else if customerBillField.text == "" {
+            setupFirstResponder()
         }
     }
     
