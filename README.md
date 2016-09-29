@@ -27,6 +27,7 @@ The following **additional** features are implemented:
 * [X] Used Autolayout to accomodate different sized screens
 * [X] Only implemented first responder code for the Text field to work when the app initially starts. I thought that after the user changes the default settings they have likely already played around with the tip slider; which means they have likely already entered their bill into the app, so it is not straight forward that they want to change the bill when they return from the settings screen. 
 * [X] Added a switch that toggles between two preset UI styles (Tints & Colors)
+* [X] Added app icon
 
 ## Video Walkthrough 
 
